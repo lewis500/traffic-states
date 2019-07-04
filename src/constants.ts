@@ -1,4 +1,4 @@
-export const total = 250;
+export const total = 180;
 export const light = total * 0.75;
 export const vf = (80 * 1000) / 3600; /* 60 kph to m/s */
 export const sj = 4;

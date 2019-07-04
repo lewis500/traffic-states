@@ -10,24 +10,16 @@ export default makeStyles({
   math: {
     fontSize: "12px"
   },
-  dot: {
-    stroke: "white",
-    strokeWidth: 3,
-    fill: colors.pink["500"],
-    cursor: "pointer"
-  },
-  xssd: {
+  trajectory: {
     fill: "none",
-    strokeWidth: 2,
-    stroke: colors.blue.A400
-  },
-  xcl: {
-    fill: "none",
-    strokeWidth: 2,
-    stroke: colors.deepOrange.A400
+    stroke: colors.lightBlue["A700"],
+    strokeWidth: "2px"
   },
   hidden: {
     fill: "white",
     opacity: 0
+  },
+  marker: {
+    fill: colors.lightBlue["A700"]
   }
 });

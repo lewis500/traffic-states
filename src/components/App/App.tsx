@@ -5,6 +5,7 @@ import { useInterval, useTimer } from "src/useTimerHook";
 import Vis from "src/components/Vis";
 import * as params from "src/constants";
 import { AppContext, reducer, initialState } from "src/ducks";
+import Plot from "src/components/Plot";
 // import TeX from "@matejmazur/react-katex";
 // import Sliders from "src/components/Sliders";
 import useStyles from "./styleApp";
@@ -19,6 +20,8 @@ const App: FunctionComponent<{}> = () => {
     dt /= params.delta;
     dispatch({ type: "TICK", payload: Math.min(dt, 300) });
   }, play);
+
+  if (state.time > 2.5 * params.cycle) dispatch({ type: "RESET" });
 
   useInterval(
     () => dispatch({ type: "ADD" }),
@@ -53,6 +56,7 @@ const App: FunctionComponent<{}> = () => {
           Reset
         </Button>
       </Paper>
+      <Plot />
     </div>
   );
 };

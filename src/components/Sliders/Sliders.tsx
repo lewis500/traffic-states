@@ -5,7 +5,7 @@ import Slider from "@material-ui/lab/Slider";
 import { Typography as Text, colors } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import TeX from "@matejmazur/react-katex";
-import { params } from "src/constants";
+import * as params from "src/constants";
 import "katex/dist/katex.min.css";
 
 const StyleSlider = withStyles((theme: Theme) => ({

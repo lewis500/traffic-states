@@ -21,7 +21,6 @@ const WIDTH = 800,
   CAR_HEIGHT = HEIGHT - yScale(params.carHeight),
   ROAD_WIDTH = HEIGHT-yScale(params.roadWidth),
   LIGHT = xScale(params.light);
-  console.log(LIGHT)
 
 const Car: FunctionComponent<{
   x: number;
@@ -55,7 +54,7 @@ const Roads: FunctionComponent<{ className: string }> = ({ className }) =>
     })
   );
 
-const lightPath = `M${LIGHT},0L${LIGHT},${HEIGHT}`;
+const lightPath = `M${LIGHT},${(HEIGHT-ROAD_WIDTH)/2}L${LIGHT},${(HEIGHT+ROAD_WIDTH)/2}`;
 const Light: FunctionComponent<{ className: string }> = ({ className }) =>
   CE("path", { className, d: lightPath });
 

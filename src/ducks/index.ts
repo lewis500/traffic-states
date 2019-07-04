@@ -11,7 +11,7 @@ export const initialState = {
   play: false,
   cars: [] as number[],
   time: 0,
-  cycle: 50
+  cycle: 40
 };
 
 export const getGreen = mo(

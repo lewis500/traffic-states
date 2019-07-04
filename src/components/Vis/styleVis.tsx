@@ -6,6 +6,11 @@ export default makeStyles({
   road: {
     fill: colors.grey["700"]
   },
+  car: {
+    fill: colors.yellow["A700"],
+    rx: 1,
+    ry: 1,
+  },
   svg: ({ width, height }: Props) => ({
     width,
     height,
@@ -17,20 +22,14 @@ export default makeStyles({
     }
   }),
   light: {
-    strokeWidth: "3px",
+    strokeWidth: "5px",
     fill: "none",
     stroke: ({ isGreen }: Props) =>
-      isGreen ? colors.green["A400"] : colors.red["A400"]
+      isGreen ? colors.green["A400"] : colors.red["A200"]
   },
   text: {
     textAlign: "center",
     fontSize: "12px",
     fontFamily: "Puritan, sans-serif"
   },
-  car: {
-    fill: colors.yellow["A700"],
-    rx: 2,
-    ry: 1,
-    // stroke: "white"
-  }
 });

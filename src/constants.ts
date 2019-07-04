@@ -11,8 +11,4 @@ export const carHeight = 2;
 export const roadWidth = 10;
 export const delta = 0.35;
 export const Q = q0 * 0.492;
-
-// export const locs = {
-//   total: 200,
-//   light: 150
-// };
+export const cycle = 40;

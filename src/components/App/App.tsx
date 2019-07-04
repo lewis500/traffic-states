@@ -11,10 +11,9 @@ import useStyles from "./styleApp";
 
 const EMPTY = {};
 const App: FunctionComponent<{}> = () => {
-  const { state, dispatch } = useContext(AppContext);
-  const { play } = state;
-
-  const classes = useStyles(EMPTY);
+  const { state, dispatch } = useContext(AppContext),
+    { play } = state,
+    classes = useStyles(EMPTY);
 
   useTimer((dt: number) => {
     dt /= params.delta;
@@ -22,9 +21,7 @@ const App: FunctionComponent<{}> = () => {
   }, play);
 
   useInterval(
-    () => {
-      dispatch({ type: "ADD" });
-    },
+    () => dispatch({ type: "ADD" }),
     (1 / params.Q) * params.delta,
     play
   );

@@ -11,7 +11,8 @@ export const initialState = {
   play: false,
   cars: [] as number[],
   time: 0,
-  cycle: 40
+  numCars: 0,
+  history: [] as number[][]
 };
 
 export const getGreen = mo(
@@ -36,7 +37,7 @@ export const reducer = (state: State, action: ActionTypes): State => {
   switch (action.type) {
     case "TICK":
       let δ = action.payload,
-        green = getGreen(state.time, state.cycle),
+        green = getGreen(state.time, params.cycle),
         cars = state.cars
           .map((x, i, arr) => {
             let nextX = i === 0 ? Infinity : arr[i - 1];
@@ -45,22 +46,33 @@ export const reducer = (state: State, action: ActionTypes): State => {
             return Math.min(nextX, x + vs(nextX - x) * δ);
           })
           .filter(d => d < params.total);
+      // state
+      // console.log(state.numCars-cars.length)
+      let l = cars.length;
+      let n = state.numCars;
+      let history = state.history.map((d, i) => {
+        if (i < n - l) return d;
+        return [...d, cars[i - n + l]];
+      });
 
       return {
         ...state,
+        history,
         cars,
         time: state.time + δ
       };
     case "ADD":
+      console.log(state.history);
+      let newCar = Math.min(
+        -params.vf / params.Q + state.cars[state.cars.length - 1] - 1 || -20,
+        -20
+      );
+
       return {
         ...state,
-        cars: state.cars.concat([
-          Math.min(
-            -params.vf / params.Q + state.cars[state.cars.length - 1] - 1 ||
-              -20,
-            -20
-          )
-        ])
+        numCars: state.numCars + 1,
+        history: [...state.history, [newCar]],
+        cars: [...state.cars, newCar]
       };
     case "SET_PLAY":
       return {

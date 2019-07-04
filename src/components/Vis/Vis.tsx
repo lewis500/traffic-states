@@ -63,7 +63,7 @@ const Vis: FunctionComponent<{}> = () => {
     classes = useStyles({
       width: WIDTH,
       height: HEIGHT,
-      isGreen: getGreen(state.time, state.cycle)
+      isGreen: getGreen(state.time, params.cycle)
     });
 
   return (

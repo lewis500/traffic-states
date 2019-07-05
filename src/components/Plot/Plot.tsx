@@ -72,28 +72,29 @@ const WIDTH = 700,
 const Trajectory: FunctionComponent<{
   trajectory: [number, number][];
   className: string;
-}> = ({ trajectory, className }) =>
-  CE("path", {
+}> = React.memo(({ trajectory, className }) => {
+  // console.log('hello')
+  return CE("path", {
     className,
     markerEnd: "url(#arrow)",
     d: "M" + trajectory.map(([t, x]) => [tScale(t), xScale(x)]).join("L")
   });
+});
 
-const Trajectories: FunctionComponent<{
-  history: [number, number][][];
-  className: string;
-}> = ({ history, className }) =>
-  CE("path", {
-    className,
-    // markerMid: "url(#arrow)",
-    d:
-      "M" +
-      history
-        .map(h => {
-          return h.map(([t, x]) => [tScale(t), xScale(x)]).join("L");
-        })
-        .join("M")
-  });
+// const Trajectories: FunctionComponent<{
+//   history: [number, number][][];
+//   className: string;
+// }> = ({ history, className }) =>
+//   CE("path", {
+//     className,
+//     d:
+//       "M" +
+//       history
+//         .map(h => {
+//           return h.map(([t, x]) => [tScale(t), xScale(x)]).join("L");
+//         })
+//         .join("M")
+//   });
 
 const Plot: FunctionComponent = () => {
   const classes = useStyles({}),
@@ -120,13 +121,13 @@ const Plot: FunctionComponent = () => {
         <XAxis mathClass={classes.math} />
         {Mask}
         <g style={{ mask: "url(#myMask)" }}>
-          <Trajectories
+          {/* <Trajectories
             history={state.history}
             className={classes.trajectory}
-          />
-          {/* {state.history.map((d, i) => (
+          /> */}
+          {state.history.map((d, i) => (
             <Trajectory className={classes.trajectory} trajectory={d} key={i} />
-          ))} */}
+          ))}
           {/* <rect className={classes.hidden} width={WIDTH} height={HEIGHT} /> */}
         </g>
       </g>

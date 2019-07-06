@@ -14,7 +14,7 @@ export default makeStyles(
     },
     trajectory: {
       fill: "none",
-      stroke: colors.lightBlue["A700"],
+      stroke: colors.lightBlue["A400"],
       strokeWidth: "2px"
     },
     hidden: {

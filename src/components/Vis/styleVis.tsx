@@ -4,10 +4,11 @@ type Props = { width: number; height: number; isGreen: boolean };
 
 export default makeStyles({
   road: {
-    fill: colors.grey["700"]
+    // fill: colors.grey["700"],
+    stroke: colors.grey["300"]
   },
   car: {
-    fill: colors.yellow["A700"],
+    fill: colors.purple["A400"],
     rx: 1,
     ry: 1,
   },
@@ -25,7 +26,7 @@ export default makeStyles({
     strokeWidth: "5px",
     fill: "none",
     stroke: ({ isGreen }: Props) =>
-      isGreen ? colors.green["A400"] : colors.red["A200"]
+      isGreen ? colors.green["A700"] : colors.red["A400"]
   },
   text: {
     textAlign: "center",

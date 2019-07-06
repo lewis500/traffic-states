@@ -1,7 +1,7 @@
 import React, {
   createElement as CE,
   FunctionComponent,
-  useContext,
+  useContext
 } from "react";
 import * as params from "../../constants";
 import { AppContext } from "src/ducks";
@@ -10,6 +10,7 @@ import TeX from "@matejmazur/react-katex";
 import "katex/dist/katex.min.css";
 import useStyles from "./stylePlot";
 import simplify from "simplify-js";
+import Vis from "src/components/Vis/Vis2";
 
 const WIDTH = 700,
   HEIGHT = 350,
@@ -24,7 +25,7 @@ const WIDTH = 700,
     height: HEIGHT + M.top + M.bottom
   },
   xScale = scaleLinear()
-    .domain([0, params.total - 2])
+    .domain([0, params.total])
     .range([HEIGHT, 0]),
   tScale = scaleLinear()
     .domain([0, 2.5 * params.cycle])
@@ -72,7 +73,6 @@ const Trajectory: FunctionComponent<{
 }> = React.memo(({ trajectory, className }) =>
   CE("path", {
     className,
-    markerEnd: "url(#arrow)",
     d: simplify(
       trajectory.map(([t, x]) => ({ x: tScale(t), y: xScale(x) })),
       0.5
@@ -102,7 +102,7 @@ const Marker = React.memo(({ className }: { className: string }) => {
         id="arrow"
         viewBox="0 0 15 15"
         refY="5"
-        refX="-1"
+        refX="5"
         markerWidth="5"
         markerHeight="5"
         orient="auto-start-reverse"
@@ -114,6 +114,7 @@ const Marker = React.memo(({ className }: { className: string }) => {
   );
 });
 const EMPTY = {};
+const maskStyle = { mask: "url(#myMask)" };
 const Plot: FunctionComponent = () => {
   const classes = useStyles(EMPTY),
     { state } = useContext(AppContext);
@@ -122,10 +123,13 @@ const Plot: FunctionComponent = () => {
     <svg className={classes.svg} style={svgProps}>
       <Marker className={classes.marker} />
       <g transform={gTranslate}>
-        <TAxis mathClass={classes.math} />
-        <XAxis mathClass={classes.math} />
         {Mask}
-        <g style={{ mask: "url(#myMask)" }}>
+        <g transform={`translate(${tScale(state.time)},${HEIGHT}) rotate(-90)`}>
+          <Vis height={30} width={HEIGHT} />
+        </g>
+        {/* <Vis */}
+
+        <g style={maskStyle}>
           {state.history.map((trajectory, i) =>
             CE(Trajectory, {
               className: classes.trajectory,
@@ -134,6 +138,8 @@ const Plot: FunctionComponent = () => {
             })
           )}
         </g>
+        <TAxis mathClass={classes.math} />
+        <XAxis mathClass={classes.math} />
       </g>
     </svg>
   );

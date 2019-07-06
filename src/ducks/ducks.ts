@@ -45,7 +45,6 @@ type ActionTypes =
 export const reducer = (state: State, action: ActionTypes): State => {
   switch (action.type) {
     case "TICK":
-      console.log(state.time)
       let δ = action.payload,
         green = getGreen(state.time, params.cycle),
         cars = state.cars

@@ -19,7 +19,7 @@ const App: FunctionComponent<{}> = () => {
 
   useTimer((dt: number) => {
     dt /= params.delta;
-    dispatch({ type: "TICK", payload: Math.min(dt, 300) });
+    dispatch({ type: "TICK", payload: Math.min(dt, 0.05) });
   }, play);
 
   if (state.time > 2.5 * params.cycle) dispatch({ type: "RESET" });
@@ -53,9 +53,9 @@ const App: FunctionComponent<{}> = () => {
           Reset
         </Button>
       </Paper>
-      <div className={classes.visContainer}>
+      {/* <div className={classes.visContainer}>
         <Vis />
-      </div>
+      </div> */}
       <Plot />
       <FD />
     </div>

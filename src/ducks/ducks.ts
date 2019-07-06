@@ -45,6 +45,7 @@ type ActionTypes =
 export const reducer = (state: State, action: ActionTypes): State => {
   switch (action.type) {
     case "TICK":
+      console.log(state.time)
       let δ = action.payload,
         green = getGreen(state.time, params.cycle),
         cars = state.cars
@@ -105,3 +106,8 @@ export const AppContext = React.createContext<{
   state: State;
   dispatch?: Dispatch<ActionTypes>;
 }>({ state: initialState, dispatch: null });
+
+// export const getStates = (time:number)=>{
+//   if(time < cycle/2)
+
+// }

@@ -1,6 +1,6 @@
 {
-  "name": "lewis-react-boilerplate",
-  "description": "a boilerplate to start visualization projects",
+  "name": "traffic-states",
+  "description": "visualization of states of traffic",
   "author": "Lewis <lewis500@gmail.com>",
   "license": "MIT",
   "scripts": {
@@ -27,15 +27,13 @@
     "d3-selection": "^1.4.0",
     "d3-timer": "^1.0.9",
     "d3-transition": "^1.2.0",
-    "fast-memoize": "^2.5.1",
-    "file-loader": "^4.0.0",
     "katex": "^0.10.2",
     "lodash.get": "^4.4.2",
     "lodash.throttle": "^4.1.1",
     "memoize-one": "^5.0.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "reselect": "^4.0.0"
+    "simplify-js": "^1.2.3"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
@@ -45,6 +43,7 @@
     "@types/react": "^16.8.22",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.0.0",
+    "file-loader": "^4.0.0",
     "html-webpack-plugin": "^3.2.0",
     "style-loader": "^0.23.1",
     "typescript": "^3.5.2",

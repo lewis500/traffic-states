@@ -24,7 +24,7 @@ const WIDTH = 700,
     height: HEIGHT + M.top + M.bottom
   },
   xScale = scaleLinear()
-    .domain([0, params.total])
+    .domain([0, params.total - 2])
     .range([HEIGHT, 0]),
   tScale = scaleLinear()
     .domain([0, 2.5 * params.cycle])
@@ -102,7 +102,7 @@ const Marker = React.memo(({ className }: { className: string }) => {
         id="arrow"
         viewBox="0 0 15 15"
         refY="5"
-        refX="8"
+        refX="-1"
         markerWidth="5"
         markerHeight="5"
         orient="auto-start-reverse"

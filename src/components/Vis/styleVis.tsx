@@ -15,7 +15,7 @@ export default makeStyles({
     width,
     height,
     display: "block",
-    margin: "30px 0",
+    // margin: "30px 0",
     "& text": {
       fontFamily: "Puritan, san-serif",
       fontSize: "13px"

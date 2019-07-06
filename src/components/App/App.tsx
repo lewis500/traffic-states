@@ -6,6 +6,7 @@ import Vis from "src/components/Vis";
 import * as params from "src/constants";
 import { AppContext, reducer, initialState } from "src/ducks";
 import Plot from "src/components/Plot";
+import FD from "src/components/FD";
 // import TeX from "@matejmazur/react-katex";
 // import Sliders from "src/components/Sliders";
 import useStyles from "./styleApp";
@@ -31,9 +32,6 @@ const App: FunctionComponent<{}> = () => {
 
   return (
     <div className={classes.main}>
-      <div className={classes.visContainer}>
-        <Vis />
-      </div>
       <Paper className={classes.paper} elevation={2}>
         {/* <Sliders /> */}
         <Button
@@ -46,7 +44,6 @@ const App: FunctionComponent<{}> = () => {
         </Button>
         <Button
           className={classes.button}
-          style={{ marginTop: "10px" }}
           variant="contained"
           color="secondary"
           onClick={() => {
@@ -56,7 +53,11 @@ const App: FunctionComponent<{}> = () => {
           Reset
         </Button>
       </Paper>
+      <div className={classes.visContainer}>
+        <Vis />
+      </div>
       <Plot />
+      <FD />
     </div>
   );
 };

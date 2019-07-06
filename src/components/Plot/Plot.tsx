@@ -12,11 +12,11 @@ import useStyles from "./stylePlot";
 import simplify from "simplify-js";
 
 const WIDTH = 700,
-  HEIGHT = 400,
+  HEIGHT = 350,
   M = {
     top: 10,
-    bottom: 40,
-    left: 40,
+    bottom: 10,
+    left: 20,
     right: 44
   },
   svgProps = {

@@ -15,10 +15,10 @@ import Vis from "src/components/Vis/Vis2";
 const WIDTH = 700,
   HEIGHT = 400,
   M = {
-    top: 10,
-    bottom: 10,
+    top: 20,
+    bottom: 5,
     left: 20,
-    right: 44
+    right: 50
   },
   svgProps = {
     width: WIDTH + M.left + M.right,
@@ -44,11 +44,11 @@ const WIDTH = 700,
   );
 const TAxis = React.memo(({ mathClass }: { mathClass: string }) => (
   <g transform={`translate(0,${xScale(params.light)})`}>
-    <path d={`M0,0L${WIDTH},0`} fill="none" stroke="black" />
+    <path d={`M0,0L${WIDTH},0`} fill="none" stroke="black"  markerEnd="url(#arrow)"/>
     <foreignObject
       width="90"
       height="75"
-      transform={`translate(${WIDTH + 3},-10)`}
+      transform={`translate(${WIDTH + 10},-10)`}
     >
       <span className={mathClass}>
         <TeX math="t \; \text{(sec)}" />
@@ -58,8 +58,8 @@ const TAxis = React.memo(({ mathClass }: { mathClass: string }) => (
 ));
 const XAxis = React.memo(({ mathClass }: { mathClass: string }) => (
   <g>
-    <path d={`M0,0L0,${HEIGHT}`} fill="none" stroke="black" />
-    <foreignObject width="90" height="75" transform={`translate(5,-10)`}>
+    <path d={`M0,0L0,${HEIGHT}`} fill="none" stroke="black" markerEnd="url(#arrow)" markerStart="url(#arrow)"/>
+    <foreignObject width="90" height="75" transform={`translate(-10,-25)`}>
       <span className={mathClass}>
         <TeX math="x \; \text{(m)}" />
       </span>
@@ -80,33 +80,18 @@ const Trajectory: FunctionComponent<{
   })
 );
 
-// const Trajectories: FunctionComponent<{
-//   history: [number, number][][];
-//   className: string;
-// }> = ({ history, className }) =>
-//   CE("path", {
-//     className,
-//     d:
-//       "M" +
-//       history
-//         .map(h => {
-//           return h.map(([t, x]) => [tScale(t), xScale(x)]).join("L");
-//         })
-//         .join("M")
-//   });
-
-const Marker = React.memo(({ className }: { className: string }) => {
+const Marker = React.memo(() => {
   return (
     <defs>
       <marker
         id="arrow"
         viewBox="0 0 15 15"
         refY="5"
-        refX="5"
-        markerWidth="5"
-        markerHeight="5"
+        refX="2"
+        markerWidth="8"
+        markerHeight="8"
         orient="auto-start-reverse"
-        className={className}
+        fill="black"
       >
         <path d="M 0 0 L 10 5 L 0 10 z" />
       </marker>
@@ -121,7 +106,7 @@ const Plot: FunctionComponent = () => {
 
   return (
     <svg className={classes.svg} style={svgProps}>
-      <Marker className={classes.marker} />
+      <Marker />
       <g transform={gTranslate}>
         {Mask}
         <g transform={`translate(${tScale(state.time)},${HEIGHT}) rotate(-90)`}>

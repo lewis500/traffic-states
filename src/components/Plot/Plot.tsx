@@ -13,7 +13,7 @@ import simplify from "simplify-js";
 import Vis from "src/components/Vis/Vis2";
 
 const WIDTH = 700,
-  HEIGHT = 350,
+  HEIGHT = 400,
   M = {
     top: 10,
     bottom: 10,

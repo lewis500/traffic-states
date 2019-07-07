@@ -55,10 +55,6 @@ export const reducer = (state: State, action: ActionTypes): State => {
             return Math.min(nextX, x + vs(nextX - x) * δ);
           })
           .filter(d => d < params.total);
-      // state
-      // console.log(state.numCars-cars.length)
-      // let l = cars.length;
-      // let n = state.numCars;
       let z = state.numCars - cars.length;
       let t = state.time;
       let history: Entry[][] = state.history.map((d, i) => {
@@ -72,7 +68,6 @@ export const reducer = (state: State, action: ActionTypes): State => {
         time: state.time + δ
       };
     case "ADD":
-      // console.log(state.history);
       let newCar = Math.min(
         -params.vf / params.Q + state.cars[state.cars.length - 1] - 1 || -20,
         -20
@@ -106,7 +101,24 @@ export const AppContext = React.createContext<{
   dispatch?: Dispatch<ActionTypes>;
 }>({ state: initialState, dispatch: null });
 
-// export const getStates = (time:number)=>{
-//   if(time < cycle/2)
-
-// }
+export const getStates = (time: number) => {
+  let { vf, cycle, q0, total, light, sj, carLength } = params;
+  if (time < cycle / 2)
+    return [["U", Math.min(time * vf, total)], ["E", total]];
+  if (time % cycle <= cycle / 2)
+    return [
+      ["U", light - (time % cycle) * q0 * sj - carLength],
+      ["J", light],
+      ["E", Math.min(light + (time % cycle) * vf, total)],
+      ["U", total]
+    ];
+  if (time % cycle > cycle / 2)
+    return [
+      ["U", light - ((time % cycle) - cycle / 2) * q0 * sj - carLength],
+      ["J", light],
+      ["E", Math.min(((time % cycle) - cycle / 2) * vf + light, total)],
+      ["U", total]
+    ];
+  // if()
+  // if()
+};

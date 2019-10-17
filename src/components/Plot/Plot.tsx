@@ -12,7 +12,7 @@ import "katex/dist/katex.min.css";
 import useStyles from "./stylePlot";
 import simplify from "simplify-js";
 import { history } from "src/ducks";
-import Vis from "src/components/Vis/Vis2";
+import Vis from "src/components/Road";
 
 const WIDTH = 700,
   HEIGHT = 400,

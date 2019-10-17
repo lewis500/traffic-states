@@ -1,14 +1,11 @@
 import React, { FunctionComponent, useContext, useReducer } from "react";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
-import { useInterval, useTimer } from "src/useTimerHook";
-import Vis from "src/components/Vis";
+import {useTimer } from "src/useTimerHook";
 import * as params from "src/constants";
 import { AppContext, reducer, initialState } from "src/ducks";
 import Plot from "src/components/Plot";
 import FD from "src/components/FD";
-// import TeX from "@matejmazur/react-katex";
-// import Sliders from "src/components/Sliders";
 import useStyles from "./styleApp";
 
 const EMPTY = {};

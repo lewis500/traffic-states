@@ -80,11 +80,7 @@ const XAxis = React.memo(({ mathClass }: { mathClass: string }) => (
 
 const CoverMask = ({ time }: { time: number }) => (
   <mask id="coverMask">
-    <rect
-      width={tScale(time)}
-      height={HEIGHT}
-      fill="white"
-    />
+    <rect width={tScale(time)} height={HEIGHT} fill="white" />
   </mask>
 );
 
@@ -144,9 +140,13 @@ export default () => {
       <g transform={gTranslate}>
         {Mask}
         <CoverMask time={state.time} />
-        <Trajectories className={classes.trajectory} />
-        <g transform={`translate(${tScale(state.time)},${HEIGHT}) rotate(-90)`}>
-          <Vis height={30} width={HEIGHT} />
+        <g style={maskStyle}>
+          <Trajectories className={classes.trajectory} />
+          <g
+            transform={`translate(${tScale(state.time)},${HEIGHT}) rotate(-90)`}
+          >
+            <Vis height={30} width={HEIGHT} />
+          </g>
         </g>
         <TAxis mathClass={classes.math} />
         <XAxis mathClass={classes.math} />

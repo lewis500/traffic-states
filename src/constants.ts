@@ -9,6 +9,6 @@ export const w = q0 / (kj - k0);
 export const carLength = 3;
 export const carHeight = 2;
 export const roadWidth = 10;
-export const delta = 0.40;
+export const delta = 0.10;
 export const Q = q0 * 0.492;
 export const cycle = 40;

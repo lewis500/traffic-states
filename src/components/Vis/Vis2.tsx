@@ -8,6 +8,7 @@ import { scaleLinear } from "d3-scale";
 import { AppContext, State, getGreen } from "src/ducks";
 import useStyles from "./styleVis";
 import * as params from "src/constants";
+import { history, xOfT } from "src/ducks";
 // import mo from "memoize-one";
 
 const Vis: FunctionComponent<{ width: number; height: number }> = ({
@@ -56,11 +57,12 @@ const Vis: FunctionComponent<{ width: number; height: number }> = ({
     <g transform={`translate(0,${height / 2 - roadWidth / 2})`}>
       <path className={classes.road} d={roadPath} strokeWidth={roadWidth} />
       <path className={classes.light} d={lightPath} />
-      {state.cars.map((d, i) => (
+      {history.map((d, i) => (
         <rect
           key={i}
           className={classes.car}
-          transform={`translate(${xScale(d) - carLength},${-carHeight / 2})`}
+          transform={`translate(${xScale(xOfT[i](state.time)) -
+            carLength},${-carHeight / 2})`}
           width={carLength}
           height={carHeight}
         />

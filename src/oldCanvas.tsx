@@ -2,6 +2,7 @@ import React, {
   createElement as CE,
   FunctionComponent,
   useContext,
+  useRef,
   useLayoutEffect
 } from "react";
 import * as params from "../../constants";
@@ -11,8 +12,8 @@ import TeX from "@matejmazur/react-katex";
 import "katex/dist/katex.min.css";
 import useStyles from "./stylePlot";
 import simplify from "simplify-js";
-import { history } from "src/ducks";
 import Vis from "src/components/Vis/Vis2";
+import { select } from "d3-selection";
 
 const WIDTH = 700,
   HEIGHT = 400,
@@ -32,6 +33,9 @@ const WIDTH = 700,
   tScale = scaleLinear()
     .domain([0, 2.5 * params.cycle])
     .range([0, WIDTH]),
+  // xAxis = axisLeft(xScale),
+  // tAxis = axisBottom(tScale),
+  // getTranslate = memoizeone((vpx, xpx) => `translate(${vpx},${xpx})`),
   gTranslate = `translate(${M.left},${M.top})`,
   range = Array.apply(null, { length: 50 }).map(
     (d: {}, i: number) => i
@@ -41,7 +45,6 @@ const WIDTH = 700,
       <rect width={WIDTH} height={HEIGHT} fill="white" />
     </mask>
   );
-
 const TAxis = React.memo(({ mathClass }: { mathClass: string }) => (
   <g transform={`translate(0,${xScale(params.light)})`}>
     <path
@@ -78,41 +81,18 @@ const XAxis = React.memo(({ mathClass }: { mathClass: string }) => (
   </g>
 ));
 
-const CoverMask = ({ time }: { time: number }) => (
-  <mask id="coverMask">
-    <rect
-      width={tScale(time)}
-      height={HEIGHT}
-      fill="white"
-    />
-  </mask>
-);
-
 const Trajectory: FunctionComponent<{
-  trajectory: number[][];
+  trajectory: [number, number][];
   className: string;
-}> = ({ trajectory, className }) => {
-  return CE("path", {
+}> = React.memo(({ trajectory, className }) =>
+  CE("path", {
     className,
     d: simplify(
       trajectory.map(([t, x]) => ({ x: tScale(t), y: xScale(x) })),
-      0.2
+      0.5
     ).reduce((a, { x, y }) => a + x + "," + y + " ", "M")
-  });
-};
-
-const coverMaskStyle = { mask: "url(#coverMask)" };
-const Trajectories = React.memo(({ className }: { className: string }) => (
-  <g style={coverMaskStyle}>
-    {history.map((trajectory, key) =>
-      CE(Trajectory, {
-        className,
-        trajectory,
-        key
-      })
-    )}
-  </g>
-));
+  })
+);
 
 const Marker = React.memo(() => {
   return (
@@ -134,23 +114,31 @@ const Marker = React.memo(() => {
 });
 const EMPTY = {};
 const maskStyle = { mask: "url(#myMask)" };
-export default () => {
+const Plot: FunctionComponent = () => {
   const classes = useStyles(EMPTY),
     { state } = useContext(AppContext);
 
+  const canvasRef = useRef<HTMLCanvasElement>();
+  useLayoutEffect(() => {
+    const canvas = canvasRef.current.getContext(
+      "2d"
+    ) as CanvasRenderingContext2D;
+    canvas.clearRect(0, 0, WIDTH, HEIGHT);
+    canvas.strokeStyle = "steelblue";
+    canvas.lineWidth = 1;
+    canvas.beginPath();
+    for (let d of state.history) {
+      // canvas.
+      canvas.moveTo(tScale(d[0][0]), xScale(d[0][1]));
+      for (let v of d) canvas.lineTo(tScale(v[0]), xScale(v[1]));
+    }
+    canvas.stroke();
+  });
+
   return (
-    <svg className={classes.svg} style={svgProps}>
-      <Marker />
-      <g transform={gTranslate}>
-        {Mask}
-        <CoverMask time={state.time} />
-        <Trajectories className={classes.trajectory} />
-        <g transform={`translate(${tScale(state.time)},${HEIGHT}) rotate(-90)`}>
-          <Vis height={30} width={HEIGHT} />
-        </g>
-        <TAxis mathClass={classes.math} />
-        <XAxis mathClass={classes.math} />
-      </g>
-    </svg>
+    <>
+      <canvas ref={canvasRef} width={WIDTH*window.devicePixelRatio} height={HEIGHT*window.devicePixelRatio} />
+    </>
   );
 };
+export default Plot;

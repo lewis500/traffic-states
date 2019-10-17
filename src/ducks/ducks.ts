@@ -1,6 +1,8 @@
 import React, { Dispatch } from "react";
 import mo from "memoize-one";
 import * as params from "src/constants";
+import range from "lodash.range";
+import { scaleLinear } from "d3-scale";
 
 const vs = (() => {
   let { sj, w, vf } = params;
@@ -9,27 +11,46 @@ const vs = (() => {
 
 type Entry = [number, number];
 
+export const getGreen = (time: number, cycle: number) =>
+  time % cycle < cycle / 2;
+
+export const history = (() => {
+  const maxTime = params.cycle * 2.5,
+    { delta, light, sj, Q } = params,
+    numCars = maxTime / Q,
+    S = params.vf / params.Q;
+
+  let cars: number[] = range(0, numCars).map(i => -i * S);
+  const history = cars.map(x => [[0, x]]);
+  for (let t = 0; t < maxTime; t += delta) {
+    let green = getGreen(t, params.cycle);
+    cars = cars.map((x, i, arr) => {
+      let nextX = i === 0 ? Infinity : arr[i - 1];
+      if (!green && x <= light) nextX = Math.min(nextX, light + sj);
+      return Math.min(nextX, x + vs(nextX - x) * delta);
+    });
+    for (let index = 0; index < history.length; index++) {
+      history[index].push([t, cars[index]]);
+    }
+  }
+  return history;
+})();
+
+export const xOfT = history.map((d, i) =>
+  scaleLinear()
+    .domain(d.map(v => v[0]))
+    .range(d.map(v => v[1]))
+);
+
 export const initialState = {
   play: false,
-  cars: [] as number[],
-  time: 0,
-  numCars: 0,
-  history: [] as Entry[][]
+  time: 0
 };
-export const getGreen = mo(
-  (time: number, cycle: number) => time % cycle < cycle / 2
-);
+
 export type State = typeof initialState;
 type ActionTypes =
   | {
       type: "TICK";
-      payload: number;
-    }
-  | {
-      type: "ADD";
-    }
-  | {
-      type: "SET_V0";
       payload: number;
     }
   | {
@@ -42,42 +63,14 @@ type ActionTypes =
       type: "SET_PLAY";
       payload: boolean;
     };
+
 export const reducer = (state: State, action: ActionTypes): State => {
   switch (action.type) {
     case "TICK":
-      let δ = action.payload,
-        green = getGreen(state.time, params.cycle),
-        cars = state.cars
-          .map((x, i, arr) => {
-            let nextX = i === 0 ? Infinity : arr[i - 1];
-            if (!green && x <= params.light)
-              nextX = Math.min(nextX, params.light + params.sj);
-            return Math.min(nextX, x + vs(nextX - x) * δ);
-          })
-          .filter(d => d < params.total);
-      let z = state.numCars - cars.length;
-      let t = state.time;
-      let history: Entry[][] = state.history.map((d, i) => {
-        if (i < z) return d;
-        return [...d, [t, cars[i - z]]];
-      });
+      // console.log(action.payload);
       return {
         ...state,
-        history,
-        cars,
-        time: state.time + δ
-      };
-    case "ADD":
-      let newCar = Math.min(
-        -params.vf / params.Q + state.cars[state.cars.length - 1] - 1 || -20,
-        -20
-      );
-      let entry: Entry = [state.time, newCar];
-      return {
-        ...state,
-        numCars: state.numCars + 1,
-        history: [...state.history, [entry]],
-        cars: [...state.cars, newCar]
+        time: state.time + action.payload
       };
     case "SET_PLAY":
       return {
@@ -87,10 +80,7 @@ export const reducer = (state: State, action: ActionTypes): State => {
     case "RESET":
       return {
         ...state,
-        time: 0,
-        history: [],
-        numCars: 0,
-        cars: [] as number[]
+        time: 0
       };
     default:
       return state;
@@ -101,24 +91,24 @@ export const AppContext = React.createContext<{
   dispatch?: Dispatch<ActionTypes>;
 }>({ state: initialState, dispatch: null });
 
-export const getStates = (time: number) => {
-  let { vf, cycle, q0, total, light, sj, carLength } = params;
-  if (time < cycle / 2)
-    return [["U", Math.min(time * vf, total)], ["E", total]];
-  if (time % cycle <= cycle / 2)
-    return [
-      ["U", light - (time % cycle) * q0 * sj - carLength],
-      ["J", light],
-      ["E", Math.min(light + (time % cycle) * vf, total)],
-      ["U", total]
-    ];
-  if (time % cycle > cycle / 2)
-    return [
-      ["U", light - ((time % cycle) - cycle / 2) * q0 * sj - carLength],
-      ["J", light],
-      ["E", Math.min(((time % cycle) - cycle / 2) * vf + light, total)],
-      ["U", total]
-    ];
-  // if()
-  // if()
-};
+// export const getStates = (time: number) => {
+//   let { vf, cycle, q0, total, light, sj, carLength } = params;
+//   if (time < cycle / 2)
+//     return [["U", Math.min(time * vf, total)], ["E", total]];
+//   if (time % cycle <= cycle / 2)
+//     return [
+//       ["U", light - (time % cycle) * q0 * sj - carLength],
+//       ["J", light],
+//       ["E", Math.min(light + (time % cycle) * vf, total)],
+//       ["U", total]
+//     ];
+//   if (time % cycle > cycle / 2)
+//     return [
+//       ["U", light - ((time % cycle) - cycle / 2) * q0 * sj - carLength],
+//       ["J", light],
+//       ["E", Math.min(((time % cycle) - cycle / 2) * vf + light, total)],
+//       ["U", total]
+//     ];
+//   // if()
+//   // if()
+// };

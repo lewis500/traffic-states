@@ -18,17 +18,12 @@ const App: FunctionComponent<{}> = () => {
     classes = useStyles(EMPTY);
 
   useTimer((dt: number) => {
-    dt /= params.delta;
-    dispatch({ type: "TICK", payload: Math.min(dt, 0.05) });
+    // dt /= params.delta * 5;
+    dt *= 4;
+    dispatch({ type: "TICK", payload: dt });
   }, play);
 
   if (state.time > 2.5 * params.cycle) dispatch({ type: "RESET" });
-
-  useInterval(
-    () => dispatch({ type: "ADD" }),
-    (1 / params.Q) * params.delta,
-    play
-  );
 
   return (
     <div className={classes.main}>
